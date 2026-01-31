@@ -2,34 +2,43 @@
 
 import { useState } from "react";
 import axios from "axios";
-import { BASE_URL } from "../config/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function UrlShortenerBox() {
   const [longUrl, setLongUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
-
+  const [loading, setLoading] = useState(false);
+  const BASE_URL = process.env.BASE_URL || "http://localhost:3001";
+  const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:8080";
   const [shortenClicked, setShortenClicked] = useState(false);
   const [copyClicked, setCopyClicked] = useState(false);
   const [shareClicked, setShareClicked] = useState(false);
 
   const notify = () => toast("Copied to clipboard!");
 
-  const handleShorten = () => {
-    if (!longUrl) return alert("Enter URL first!");
+  const handleShorten = async () => {
+    if (!longUrl) return alert("Please enter a URL");
+    console.log("Long URL:", longUrl);
+    setLoading(true);
 
-    setShortenClicked(true);
-    setTimeout(() => setShortenClicked(false), 600);
+    try {
+      const response = await axios.post(
+        `${BACKEND_URL}/short`,
+        {"longUrl": longUrl},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
-    axios
-      .post(`${BASE_URL}/short`, { longUrl })
-      .then((response) => {
-        setShortUrl(response.data);
-      })
-      .catch(() => {
-        alert("Failed to shorten URL.");
-      });
+      setShortUrl(`${BASE_URL}/${response.data}`);
+    } catch (error) {
+      alert("Error while shortening URL");
+    }
+
+    setLoading(false);
   };
 
   const handleCopy = () => {
