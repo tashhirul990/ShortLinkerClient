@@ -9,9 +9,9 @@ export default async function RedirectPage({
   const { shortKey } = await params;
   console.log("shortKey:", shortKey);
 
-  const BACKEND_URL =
-    process.env.BACKEND_URL || "http://localhost:8080";
-  const res = await fetch(`${BACKEND_URL}/${shortKey}`, {
+  const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
+  const res = await fetch(`${API_URL}/${shortKey}`, {
     cache: "no-store",
   });
 

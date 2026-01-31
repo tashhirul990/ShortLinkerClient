@@ -9,8 +9,8 @@ export default function UrlShortenerBox() {
   const [longUrl, setLongUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-  const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3001";
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8080";
   const [shortenClicked, setShortenClicked] = useState(false);
   const [copyClicked, setCopyClicked] = useState(false);
   const [shareClicked, setShareClicked] = useState(false);
@@ -21,12 +21,12 @@ export default function UrlShortenerBox() {
     if (!longUrl) return alert("Please enter a URL");
     console.log("Long URL:", longUrl);
     setLoading(true);
-    console.log("BACKEND_URL:", BACKEND_URL);
+    console.log("API_URL:", API_URL);
     console.log("BASE_URL:", BASE_URL);
 
     try {
       const response = await axios.post(
-        `${BACKEND_URL}/short`,
+        `${API_URL}/short`,
         {"longUrl": longUrl},
         {
           headers: {
