@@ -35,10 +35,9 @@ export default function UrlShortenerBox() {
         }
       );
 
-      // If response.data is already a full URL, use it as-is; otherwise prepend BASE_URL
       const finalUrl = response.data.startsWith("http") 
         ? response.data 
-        : `${BASE_URL}/${response.data}`;
+        : `https://${BASE_URL}/${response.data}`;
       setShortUrl(finalUrl);
     } catch (error) {
       alert("Error while shortening URL");
